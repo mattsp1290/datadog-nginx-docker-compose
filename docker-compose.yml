@@ -1,0 +1,36 @@
+version: "3.8"
+# based on https://linuxtut.com/en/cd4dbfdaa60bcfbefd74/
+services:
+  web:
+    image: mattsp1290/ddnginx:latest
+    ports:
+      - 80:80
+    links:
+      - dd-agent:dd-agent
+    depends_on:
+      - dd-agent
+    labels:
+      com.datadoghq.ad.check_names: '["nginx"]'
+      com.datadoghq.ad.init_configs: '[{}]'
+      com.datadoghq.ad.instances: '[{"nginx_status_url": "http://%%host%%:81/nginx_status"}]'
+      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "web"}]'
+
+
+#datadog container settings
+  dd-agent:
+    container_name: dd-agent
+    image: datadog/agent:7
+    environment:
+      # uncomment and edit if your datadog org is not in us1 datadog (https://app.datadoghq.com)
+      # - DD_SITE="us3.datadoghq.com"
+      - DD_API_KEY=Write your API key here
+      - DD_APM_ENABLED=true
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_AC_EXCLUDE="name:dd-agent"
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+     - /proc/:/host/proc/:ro
+     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+    ports:
+      - "8126:8126/tcp"

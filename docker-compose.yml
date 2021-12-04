@@ -22,7 +22,7 @@ services:
     image: datadog/agent:7
     environment:
       # uncomment and edit if your datadog org is not in us1 datadog (https://app.datadoghq.com)
-      # - DD_SITE="us3.datadoghq.com"
+      # - DD_SITE=us3.datadoghq.com
       - DD_API_KEY=Write your API key here
       - DD_APM_ENABLED=true
       - DD_LOGS_ENABLED=true

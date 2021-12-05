@@ -4,7 +4,7 @@ services:
   web:
     image: mattsp1290/ddnginx:latest
     ports:
-      - 80:80
+      - 8000:80
     links:
       - dd-agent:dd-agent
     depends_on:
